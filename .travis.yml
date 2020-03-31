@@ -1,18 +1,27 @@
-sudo: false
+# 使用语言
 language: node_js
+
+sudo: false
+
+# node版本
 node_js:
-  - 10 # use nodejs v10 LTS
-cache: npm
+  - "6"
+
+# 设置只监听哪个分支
 branches:
   only:
-    - master # build master branch only
-script:
-  - hexo generate # generate static files
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GH_TOKEN
-  keep-history: true
-  on:
-    branch: master
-  local-dir: public
+    - source
+
+# 缓存，可以节省集成的时间，这里我用了yarn，如果不用可以删除
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+# tarvis生命周期执行顺序详见官网文档
+before_install:
+  - npm install -g hexo-cli
+
+install:
+# 不用yarn的话这里改成 npm i 即可
+  - yarn install --pure-lockfile
